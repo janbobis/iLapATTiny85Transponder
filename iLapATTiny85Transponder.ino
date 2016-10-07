@@ -8,10 +8,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define MARK 16     // This was supposed to be 26 but due to inaccuracy and some delays using 
-                    // internal clock, the value was adjusted to achieve desired output
-#define SPACE 26
-
+#define DELAY_MICROSEC  24     // This was supposed to be 26 but due to inaccuracy and some delays using 
+                               // internal clock, the value was adjusted to achieve desired outpu
 void setup() {
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH);
@@ -19,7 +17,6 @@ void setup() {
   GTCCR = _BV(PWM1B);
   OCR1C = 17;
   OCR1B = 7;  // 41% duty cycle
-
 }
 
 void loop() {
@@ -33,30 +30,27 @@ void loop() {
   delay(5);
 }
 
-void sendByte(unsigned long data){
-  for (int i = 0; i<8; i++){
-    if (i==0) space(SPACE);
-
+void sendByte(uint8_t data){
+  space(DELAY_MICROSEC);   // start bit
+  for (uint8_t i = 0; i<8; i++){
     if (data & 1) {
-      mark(MARK);
+      mark(DELAY_MICROSEC);
     } else {
-      space(SPACE);
+      space(DELAY_MICROSEC);
     }
-
-    if(i==7) mark(MARK);
     data>>=1;
   }
+  mark(DELAY_MICROSEC);   // stop bit
 }
 
 
 void mark(int time){
   GTCCR &= ~(_BV(COM1B1));
   digitalWrite(4, HIGH);
-  delayMicroseconds(time);
-
+  delayMicroseconds(time-6);
 }
 
 void space(int time){
   GTCCR |= _BV(COM1B1);
-  delayMicroseconds(time-2);  
+  delayMicroseconds(time);  
 }
