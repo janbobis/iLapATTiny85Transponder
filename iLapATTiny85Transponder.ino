@@ -9,7 +9,7 @@
 #include <avr/interrupt.h>
 
 #define DELAY_MICROSEC  24     // This was supposed to be 26 but due to inaccuracy and some delays using 
-                               // internal clock, the value was adjusted to achieve desired outpu
+                               // internal clock, the value was adjusted to achieve desired output
 void setup() {
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH);
@@ -47,7 +47,7 @@ void sendByte(uint8_t data){
 void mark(int time){
   GTCCR &= ~(_BV(COM1B1));
   digitalWrite(4, HIGH);
-  delayMicroseconds(time-6);
+  delayMicroseconds(time-5);
 }
 
 void space(int time){
