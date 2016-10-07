@@ -5,11 +5,9 @@
 // a 26uS delay causing a 38KHz data mixing with the carrier
 // signal (enabling and disabling the Fast PWM)
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
 #define DELAY_MICROSEC  24     // This was supposed to be 26 but due to inaccuracy and some delays using 
-                               // internal clock, the value was adjusted to achieve desired output
+                               // internal clock and use of delayMicroseconds function
+                               // the value was adjusted to achieve the desired output
 void setup() {
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH);
@@ -21,6 +19,7 @@ void setup() {
 
 void loop() {
   // send code 1234567 (equivalent to 0E AD DC BA 98)
+  // for other ILaps equivalent code please see iLapsKeyCode.txt
   sendByte(0x0E);
   sendByte(0xAD);
   sendByte(0xDC);
